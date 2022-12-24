@@ -1,0 +1,19 @@
+.optionsWrapper {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+}
+
+.optionBtn {
+    padding: 10px 15px;
+
+    font-size: 15px;
+
+    text-transform: capitalize;
+    cursor: pointer;
+    background-color: rgba(167, 164, 164, 0.548);
+    border: 1px solid rgba(0, 0, 0, 0.457);
+    border-radius: 3px;
+
+    transition: transform 250ms ease-in-out;
+}
