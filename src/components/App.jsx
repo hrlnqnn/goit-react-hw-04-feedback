@@ -4,35 +4,28 @@ import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 import { Section } from './Section/Section';
 
 export const App = () => {
-  const INITIAL_STATE = JSON.parse(localStorage.getItem('feedbackData')) ?? {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
 
-  const [feedbackData, setFeedbackData] = useState(INITIAL_STATE);
 
-  useEffect(
-    () => localStorage.setItem('feedbackData', JSON.stringify(feedbackData)),
-    [feedbackData]
-  );
 
   const onLeaveFeedback = e => {
     const feedbackOption = e.target.dataset.feedback;
 
-    setFeedbackData(prevState => ({
-      ...prevState,
-      [feedbackOption]: feedbackData[feedbackOption] + 1,
-    }));
+    if (feedbackOption === 'good') setGood(prev => prev + 1);
+    if (feedbackOption === 'neutral') setNeutral(prev => prev + 1);
+    if (feedbackOption === 'bad') setBad(prev => prev + 1);
+
   };
 
   const countTotalFeedback = () => {
-    return Object.values(feedbackData).reduce((a, b) => a + b, 0);
+    return good + neutral + bad;
   };
 
   const countPositiveFeedbackPercentage = () => {
-    if (feedbackData.good) {
-      return Math.floor((feedbackData.good / countTotalFeedback()) * 100) + '%';
+    if (good) {
+      return Math.floor((good / countTotalFeedback()) * 100) + '%';
     }
 
     return '-';
@@ -42,7 +35,7 @@ export const App = () => {
     <main>
       <Section title="Please leave feedback">
         <FeedbackOptions
-          options={Object.keys(feedbackData)}
+          options={Object.keys({ good, neutral, bad })}
           onLeaveFeedback={onLeaveFeedback}
         />
       </Section>
@@ -51,9 +44,9 @@ export const App = () => {
           <h3>There is no feedback yet...</h3>
         ) : (
           <Statistics
-            good={feedbackData.good}
-            neutral={feedbackData.neutral}
-            bad={feedbackData.bad}
+            good={good}
+            neutral={neutral}
+            bad={bad}
             total={countTotalFeedback()}
             positivePercentage={countPositiveFeedbackPercentage()}
           />
